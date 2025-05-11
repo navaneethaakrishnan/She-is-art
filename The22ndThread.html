@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Moment. A Mark. A Mystery 🎈</title>
+    
+    <style>
+        /* Base styles */
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: black;
+            overflow: hidden;
+        }
+
+        /* Background image with dark overlay */
+        .bg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: url('https://i.pinimg.com/736x/51/99/7a/51997a5fd61edd843a82aa27a626ccd3.jpg') no-repeat center/100% 100%;
+            z-index: 1;
+        }
+        .bg::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 2;
+        }
+
+        /* Gift box container */
+         .gift-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            text-align: center;
+            transform: translate(-50%, -50%);
+            font-size: 6.5em;
+            cursor: pointer;
+            z-index: 3;
+            transition: text-shadow 0.3s ease-in-out;
+            animation: shake 1.5s infinite;
+            color: white;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+            25%      { transform: translate(-50%, -50%) rotate(-5deg); }
+            50%      { transform: translate(-50%, -50%) rotate(5deg); }
+            75%      { transform: translate(-50%, -50%) rotate(-5deg); }
+        }
+        .gift-box:hover {
+            text-shadow: 0 0 15px rgba(255, 70, 100, 0.8);
+        }
+
+        /* Popup styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 80%; max-width: 400px;
+            background-color: #fdfaf6;
+            padding: 20px;
+            text-align: center;
+            border-radius: 15px;
+            border: 2px solid #7851A9;
+            box-shadow: 0 0 15px rgba(233, 30, 99, 0.5);
+            opacity: 0;
+            transition: all 0.4s ease-in-out;
+            z-index: 10;
+        }
+        .popup.show {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .popup .message {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        .click-again {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 18px;
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+            color: white;
+            font-size: 1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .click-again:hover {
+            background: linear-gradient(to right, #ff5e81, #ff6fa2);
+            transform: scale(1.05);
+        }
+
+        /* Secret button */
+        .secret-button {
+            position: fixed;
+            bottom: 20px; right: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 1.5em;
+            border-radius: 50%;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 15;
+        }
+        .secret-button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        /* cake animation styles */
+        .cake-container {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            z-index: 999;
+            pointer-events: none;
+        }
+        .cake-container.show {
+            animation: bounceIn 0.6s ease-out forwards;
+        }
+        @keyframes bounceIn {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+            60% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+        .cake {
+            width: 160px;
+            height: 180px;
+            background: linear-gradient(to top, #ffc0cb, #ff8da1);
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 0 25px rgba(255, 105, 180, 0.6);
+            animation: float 3s ease-in-out infinite;
+        }
+        .cake-text {
+            position: absolute;
+            bottom: 75px;
+            width: 100%;
+            text-align: center;
+            font-size: 1.1em;
+            font-style: italic;
+            opacity: 0.8;
+            color: white;
+            text-shadow: 0 0 5px #ff69b4;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+        .candle {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            width: 12px;
+            height: 30px;
+            background: #fff;
+            border-radius: 3px;
+            transform: translateX(-50%) rotate(0deg);
+            animation: sway 2s ease-in-out infinite;
+            box-shadow: 0 0 8px rgba(255, 255, 0, 0.7);
+        }
+        @keyframes sway {
+            0%, 100% { transform: translateX(-50%) rotate(0deg); }
+            50% { transform: translateX(-50%) rotate(8deg); }
+        }
+        .flame {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle at 50% 50%, #ffeb3b, #f57f17);
+            border-radius: 50%;
+            transform: translateX(-50%) scale(0.8);
+            animation: flameFlicker 0.7s infinite;
+        }
+        @keyframes flameFlicker {
+            0%, 100% { transform: translateX(-50%) scale(0.8) translateY(0); opacity: 1; }
+            50% { transform: translateX(-50%) scale(1.2) translateY(-4px); opacity: 0.7; }
+        }
+
+        /* Footer text */
+        .footer-message {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 1em;
+            font-style: italic;
+            opacity: 0.7;
+            z-index: 2;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Hidden audio element -->
+    <audio id="bgAudio" src="hbd.mp3" preload="auto"></audio>
+
+    <!-- Background -->
+    <div class="bg"></div>
+
+    <!-- Gift box -->
+    <div class="gift-container">
+        <div class="gift-box" onclick="openGift()">🎁</div>
+    </div>
+
+     <!-- Popups -->
+    <div id="popup1" class="popup">
+        <div class="message">
+            "Happy Birthday, Rhikshitha ✨<br>
+             Wishing you a year filled with growth, success, and moments you truly cherish. Your dedication and discipline set you apart, and it’s inspiring to see you push your boundaries every day. May this year bring you even closer to your dreams.” 
+        </div>
+        <button class="click-again" onclick="showPopup('popup2')">Stay with me a second longer… </button>
+    </div>
+
+    <div id="popup2" class="popup">
+        <div class="message">
+            “You move through this world with a quiet strength—pushing past limits most people wouldn’t think to challenge. I’ve watched you, not just working hard but shaping your life with intention. This year, I have no doubt you’ll surprise even yourself. Every step you take, every choice you make—it’s gonna make a bigger impact than you think. And something tells me, the mark you leave this year… will be unforgettable.” 
+        </div>
+        <button class="click-again" onclick="showPopup('popup3')">Before I let you go… 🔜</button>
+    </div>
+
+    <div id="popup3" class="popup">
+        <div class="message">
+            "You’re probably getting all sorts of wishes today, but here’s one that’s a little less expected. Just a quiet thought... May this year introduce you to parts of yourself you haven’t met yet. May your quiet power ripple in ways no one can ignore. And may something in this small gift remind you—You’re not just seen... you’re deeply felt." 
+        </div>
+        <button class="click-again" onclick="showPopup('popup4')">Let this one linger… 💖</button>
+    </div>
+
+    <div id="popup4" class="popup">
+        <div class="message">
+             "You’ve lived a hundred lives through pages—loved people who don’t exist, mourned endings that felt too real. I think that’s why you carry yourself the way you do: like someone who’s seen too much to pretend anymore. But I hope today isn’t just another story for you. I hope it's a chapter you’ll want to reread. And if no one says it plainly—here’s me, saying it quietly: You matter more than you let on. And you’re not as unreadable as you think." 
+        </div>
+        <div style="display: flex; justify-content: center; gap: 12px; margin-top: 20px;">
+            <button class="click-again" onclick="replayExperience()">Replay the Magic 💫</button>
+            <button class="click-again" onclick="triggerCake()">⁉️</button>
+        </div>
+    </div>
+
+    <!-- Cake animation container -->
+    <div id="cakeContainer" class="cake-container">
+        <div class="cake">
+            <div class="candle">
+                <div class="flame"></div>
+            </div>
+            <div class="cake-text">Happy 22 <br> STARGIRL ♡ </div>
+        </div>
+    </div>
+
+    <!-- Footer text -->
+    <div class="footer-message">Good Things Are Coming Your Way.</div>
+
+    <!-- Include the confetti library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti"></script>
+
+    <script>
+        // grab audio once
+        const bgAudio = document.getElementById('bgAudio');
+
+        console.log("Hello, you.. You're reading this—I knew you would. You notice the small things. The ones others miss.");
+
+        function openGift() {
+            // reset & play audio
+            bgAudio.currentTime = 0;
+            bgAudio.play().catch(() => {/* autoplay may require user gesture; gift click qualifies */});
+            
+            confetti({
+                particleCount: 250,
+                spread: 100,
+                origin: { x: 0.5, y: 0.5 },
+                colors: ['#FF0', '#F0F', '#0FF', '#E3B5A4', '#FCD5CE', '#FFF1E6', '#B5EAEA']
+            });
+            showPopup('popup1');
+        }
+    
+        function showPopup(popupId) {
+            document.querySelectorAll('.popup').forEach(popup => popup.classList.remove('show'));
+            document.getElementById(popupId).classList.add('show');
+        }
+    
+        function replayExperience() {
+            // hide popups, stop audio
+            document.querySelectorAll('.popup').forEach(popup => popup.classList.remove('show'));
+            bgAudio.pause();
+            bgAudio.currentTime = 0;
+            triggerBalloons();
+        }
+    
+        function triggerCake() {
+           
+            const cake = document.getElementById('cakeContainer');
+            cake.classList.add('show');
+            setTimeout(() => {
+                cake.classList.remove('show');
+            }, 8000);
+        }
+    
+        function triggerBalloons() {
+            const canvas = document.createElement('canvas');
+            canvas.style.position = 'fixed';
+            canvas.style.top = 0;
+            canvas.style.left = 0;
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            canvas.style.pointerEvents = 'none';
+            canvas.style.zIndex = 1000;
+            document.body.appendChild(canvas);
+    
+            const myConfetti = confetti.create(canvas, { resize: true, useWorker: true });
+    
+            let count = 0;
+            const interval = setInterval(() => {
+                myConfetti({
+                    particleCount: 7.5,
+                    angle: 90,
+                    spread: 45,
+                    startVelocity: 30,
+                    gravity: 0.2,
+                    colors: ['#FF3F72', '#FF6EC7', '#FF8C42', '#FFB6C1', '#FFE162', '#E0B0FF', '#E0FF65', '#C1F0F6'],
+                    shapes: ['circle'],
+                    origin: { x: Math.random(), y: 1 }
+                });
+    
+                count++;
+                if (count > 30) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.body.removeChild(canvas);
+                    }, 2000);
+                }
+            }, 100);
+        }
+    </script>
+
+    <!-- letter-by-letter animation -->
+    <script>
+        (function() {
+            const originalMessages = {};
+            document.querySelectorAll('.popup').forEach(popup => {
+                const msgEl = popup.querySelector('.message');
+                if (msgEl) {
+                    originalMessages[popup.id] = msgEl.innerHTML;
+                }
+            });
+
+            // Animate text by lines & characters
+            function animateText(element, lines) {
+                element.innerHTML = '';
+                lines.forEach((line, i) => {
+                    const lineDiv = document.createElement('div');
+                    lineDiv.style.display = 'block';
+                    element.appendChild(lineDiv);
+                    line.split('').forEach((char, j) => {
+                        const span = document.createElement('span');
+                        span.textContent = char;
+                        span.style.opacity = '0';
+                        span.style.transition = `opacity 0.55s ease ${0.045 * j + 0.35 * i}s`;
+                        lineDiv.appendChild(span);
+                        setTimeout(() => span.style.opacity = '1', 60);
+                    });
+                });
+            }
+
+            // Override showPopup to restore content & run animation
+            const _show = window.showPopup;
+            window.showPopup = function(popupId) {
+                _show(popupId);
+                const popup = document.getElementById(popupId);
+                const msgEl = popup.querySelector('.message');
+                const original = originalMessages[popupId];
+                if (msgEl && original) {
+                    const lines = original.split('<br>');
+                    animateText(msgEl, lines);
+                }
+            };
+        })();
+    </script>
+
+    <!-- Created not for applause, but for one person to feel it.
+    And if she ever wonders… it was Navaneethakrishnan who left this here. -->
+
+</body>
+</html>
